@@ -4,9 +4,9 @@ import Row from "./Row"
 
 const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
 
-    // const tableLensStyle: React.CSSProperties = {
-        
-    // }
+    const tableLensStyle: React.CSSProperties = {
+        width: data.columns.length * 150 + "px"
+    }
 
     const headerStyle: React.CSSProperties = {
         display: "flex",
@@ -52,7 +52,7 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
     })  
 
     return (
-        <div>
+        <div style={tableLensStyle}>
             <div style={headerStyle}>
                 {columns.map((column, i) => {
                     return (
@@ -64,6 +64,9 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
             </div>
             <div style={bodyStyle}>
                 {rows.map((row, i) => {
+                    if (i === rows.length - 1) {
+                        return <Row xScales={xScales} key={i} row={row} isLast={true}/>
+                    }
                     return <Row xScales={xScales} key={i} row={row}/>
                 })}
             </div>

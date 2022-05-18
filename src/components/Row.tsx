@@ -1,17 +1,18 @@
 import React from "react"
 import * as d3 from 'd3'
 
-const Row = ({ row, xScales }: {row: object, xScales: Array<d3.ScaleLinear<number, number, never>>}) => {
+const Row = ({ row, xScales, isLast }: {row: object, xScales: Array<d3.ScaleLinear<number, number, never>>, isLast?: boolean}) => {
 
     const rowStyle: React.CSSProperties = {
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "row"
     }
 
     const cellStyle: React.CSSProperties = {
         display: "flex",
         borderLeft: "1px solid black",
         borderRight: "1px solid black",
+        borderBottom: isLast ? "1px solid black" : "none",
         padding: "0px 5px",
         width: "150px",
     }
@@ -30,8 +31,8 @@ const Row = ({ row, xScales }: {row: object, xScales: Array<d3.ScaleLinear<numbe
         return {
             width: `${width}%`,
             height: "5px",
-            backgroundColor: "blue",
-            color: "white",
+            backgroundColor: "#4284f5",
+            color: "black",
         }
     }
 
@@ -39,27 +40,32 @@ const Row = ({ row, xScales }: {row: object, xScales: Array<d3.ScaleLinear<numbe
         return {
             width: `${width}%`,
             height: "30px",
-            backgroundColor: "blue",
-            color: "white",
+            backgroundColor: "#4284f5",
+            color: "black",
         }
     }
 
-    const [click, setClick] = React.useState<boolean>(false)
+    const [mouseEnter, setMouseEnter] = React.useState<boolean>(false)
     
     const bars = Object.values(row).map((value, i) => {
-        return <div style={click ? cellStyleClicked : cellStyle} key={i}>
+        return <div style={mouseEnter ? cellStyleClicked : cellStyle} key={i}>
             <div 
-                style={click ? barStyleClicked(xScales[i](value)) : barStyle(xScales[i](value))} 
-                
+                style={mouseEnter ? barStyleClicked(xScales[i](value)) : barStyle(xScales[i](value))} 
             >
-                {click ? value : ""}
+                {mouseEnter ? value : ""}
             </div>
         </div>
     })
 
-    return <div style={rowStyle} onClick={() => {setClick(!click)}}>
-        {bars}
-    </div>
+    return (
+        <div 
+            style={rowStyle} 
+            onMouseEnter={() => {setMouseEnter(true)}} 
+            onMouseLeave={() => {setMouseEnter(false)}}
+        >
+            {bars}
+        </div>
+    )
 }
 
 export default Row
