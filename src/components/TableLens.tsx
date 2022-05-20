@@ -52,7 +52,7 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
             return scale
         }
         return d3.scaleLinear().domain([0, 10]).range([0, 100])
-    })  
+    })
 
     return (
         <div style={tableLensStyle}>

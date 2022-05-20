@@ -21,6 +21,7 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         borderBottom: isLast ? "1px solid black" : "none",
         padding: "0px 5px",
         width: "150px",
+        position: "relative"
     }
 
     const cellStyleClicked: React.CSSProperties = {
@@ -31,12 +32,12 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         borderBottom: "1px solid black",
         padding: "0px 5px",
         width: "150px",
+        position: "relative"
     }
 
     const barStyle = (scale: d3.ScaleLinear<number, number> | d3.ScaleBand<string>, value: any): React.CSSProperties => {
         const isCategorical = isNaN(+value)
         if (isCategorical) {
-            console.log(scale(value))
             return {
                 width: `${100/scale.domain().length}%`,
                 height: "5px",
@@ -55,7 +56,6 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
     const barStyleClicked = (scale: d3.ScaleLinear<number, number> | d3.ScaleBand<string>, value: any): React.CSSProperties => {
         const isCategorical = isNaN(+value)
         if (isCategorical) {
-            console.log(scale(value))
             return {
                 width: `${100/scale.domain().length}%`,
                 height: "5px",
@@ -75,7 +75,9 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
     
     const bars = Object.values(row).map((value, i) => {
         return <div style={mouseEnter ? cellStyleClicked : cellStyle} key={i}>
-            {mouseEnter ? value : ""}
+            <div style={{position: "absolute"}}>
+                {mouseEnter ? value : ""}
+            </div>
             <div 
                 style={mouseEnter ? barStyleClicked(xScales[i], value) : barStyle(xScales[i], value)} 
             >
