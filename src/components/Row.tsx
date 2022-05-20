@@ -58,7 +58,7 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         if (isCategorical) {
             return {
                 width: `${100/scale.domain().length}%`,
-                height: "5px",
+                height: "30px",
                 marginLeft: `${scale(value)}%`,
                 backgroundColor: "#4284f5"
             }
