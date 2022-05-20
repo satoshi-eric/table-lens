@@ -5,7 +5,7 @@ import Row from "./Row"
 const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
 
     const tableLensStyle: React.CSSProperties = {
-        width: data.columns.length * 150 + "px"
+        width: data.columns.length * 150 + "px",
     }
 
     const headerStyle: React.CSSProperties = {
@@ -31,20 +31,23 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
         setRows(data.map(d => d))
     }, [data])
 
-    const xScales: Array<d3.ScaleLinear<number, number, never>>  = columns.map((column, i) => {
+    const xScales: Array<d3.ScaleLinear<number, number, never> | d3.ScaleBand<string>>  = columns.map((column, i) => {
         const domain: Array<number> = rows.map(row => +row[column])
         const [min, max] = [Math.min(...domain), Math.max(...domain)]
         let scale = null
+
+        if (isNaN(min) || isNaN(max)) {
+            scale = d3.scaleBand()
+                .domain(rows.map(row => row[column]).sort())
+                .range([0, 100])
+            return scale
+        }
         
         scale = d3.scaleLinear()
             .domain([min, max])
             .range([0, 100])
 
-        if (isNaN(min) || isNaN(max)) {
-            scale = d3.scaleLinear()
-                .domain([0, 10])
-                .range([0, 100])
-        }
+        
         if (scale) {
             return scale
         }

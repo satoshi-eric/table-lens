@@ -1,7 +1,13 @@
 import React from "react"
 import * as d3 from 'd3'
 
-const Row = ({ row, xScales, isLast }: {row: object, xScales: Array<d3.ScaleLinear<number, number, never>>, isLast?: boolean}) => {
+interface rowProps {
+    row: object, 
+    xScales: Array<d3.ScaleLinear<number, number, never> | d3.ScaleBand<string>>, 
+    isLast?: boolean
+}
+
+const Row = ({ row, xScales, isLast }: rowProps) => {
 
     const rowStyle: React.CSSProperties = {
         display: "flex",
@@ -27,18 +33,38 @@ const Row = ({ row, xScales, isLast }: {row: object, xScales: Array<d3.ScaleLine
         width: "150px",
     }
 
-    const barStyle = (width: number): React.CSSProperties => {
+    const barStyle = (scale: d3.ScaleLinear<number, number> | d3.ScaleBand<string>, value: any): React.CSSProperties => {
+        const isCategorical = isNaN(+value)
+        if (isCategorical) {
+            console.log(scale(value))
+            return {
+                width: `${100/scale.domain().length}%`,
+                height: "5px",
+                marginLeft: `${scale(value)}%`,
+                backgroundColor: "#4284f5"
+            }
+        }
         return {
-            width: `${width}%`,
+            width: `${scale(value)}%`,
             height: "5px",
             backgroundColor: "#4284f5",
             color: "black",
         }
     }
 
-    const barStyleClicked = (width: number): React.CSSProperties => {
+    const barStyleClicked = (scale: d3.ScaleLinear<number, number> | d3.ScaleBand<string>, value: any): React.CSSProperties => {
+        const isCategorical = isNaN(+value)
+        if (isCategorical) {
+            console.log(scale(value))
+            return {
+                width: `${100/scale.domain().length}%`,
+                height: "5px",
+                marginLeft: `${scale(value)}%`,
+                backgroundColor: "#4284f5"
+            }
+        }
         return {
-            width: `${width}%`,
+            width: `${scale(value)}%`,
             height: "30px",
             backgroundColor: "#4284f5",
             color: "black",
@@ -49,10 +75,11 @@ const Row = ({ row, xScales, isLast }: {row: object, xScales: Array<d3.ScaleLine
     
     const bars = Object.values(row).map((value, i) => {
         return <div style={mouseEnter ? cellStyleClicked : cellStyle} key={i}>
+            {mouseEnter ? value : ""}
             <div 
-                style={mouseEnter ? barStyleClicked(xScales[i](value)) : barStyle(xScales[i](value))} 
+                style={mouseEnter ? barStyleClicked(xScales[i], value) : barStyle(xScales[i], value)} 
             >
-                {mouseEnter ? value : ""}
+                
             </div>
         </div>
     })

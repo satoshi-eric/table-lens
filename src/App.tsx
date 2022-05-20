@@ -4,6 +4,7 @@ import TableLens from './components/TableLens'
 
 const App = () => {
   const csvUrl = 'https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/iris.csv'
+  // const csvUrl = 'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'
   const [data, setData] = React.useState<d3.DSVRowArray<string>>()
   React.useEffect(() => {
     d3.csv(csvUrl).then(res => { setData(res) })
