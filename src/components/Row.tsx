@@ -75,7 +75,7 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
     
     const bars = Object.values(row).map((value, i) => {
         return <div style={mouseEnter ? cellStyleClicked : cellStyle} key={i}>
-            <div style={{position: "absolute"}}>
+            <div style={{position: "absolute", userSelect: "none"}}>
                 {mouseEnter ? value : ""}
             </div>
             <div 

@@ -11,6 +11,7 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
     const headerStyle: React.CSSProperties = {
         display: "flex",
         flexDirection: "row",
+        userSelect: "none"
     }
 
     const bodyStyle: React.CSSProperties = {
@@ -20,16 +21,18 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
     const headerCellStyle: React.CSSProperties = {
         border: "1px solid black",
         padding: "5px",
-        width: "150px"
+        width: "150px",
+        cursor: "pointer"
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
     const [rows, setRows] = React.useState<Array<any>>([])
+    const [state, setState] = React.useState<boolean>(false)
 
     React.useEffect(() => {
         setColumns(data.columns)
-        setRows(data.map(d => d))
-    }, [data])
+        setRows(data)
+    }, [data, state])
 
     const xScales: Array<d3.ScaleLinear<number, number, never> | d3.ScaleBand<string>>  = columns.map((column, i) => {
         const domain: Array<number> = rows.map(row => +row[column])
@@ -54,12 +57,26 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
         return d3.scaleLinear().domain([0, 10]).range([0, 100])
     })
 
+    const sortRows = (event: React.SyntheticEvent) => {
+        const target = event.target as HTMLInputElement
+        const column = target.innerText
+        const isCategorical = isNaN(+rows[0][column])
+        const sortedRows = rows.sort((a, b) => {
+            if (isCategorical) {
+                return a[column] > b[column] ? 1 : -1
+            }
+            return a[column] - b[column]
+        })
+        setState(!state)
+        setRows(sortedRows)
+    }
+
     return (
         <div style={tableLensStyle}>
             <div style={headerStyle}>
                 {columns.map((column, i) => {
                     return (
-                        <div style={headerCellStyle} key={i}>
+                        <div style={headerCellStyle} key={i} onClick={sortRows}>
                             {column}
                         </div>
                     )
