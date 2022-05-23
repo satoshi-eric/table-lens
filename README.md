@@ -11,7 +11,7 @@ A seguir, são listados os passos para rodar o aplicativo localmente:
 - O browser será aberto com a aplicação rodando
 
 ## Exemplos de datasets
-- Conjunto de dados [Iris](https://archive.ics.uci.edu/ml/datasets/iris)
+- Conjunto de dados <a href="https://archive.ics.uci.edu/ml/datasets/iris">Iris</a> 
 <img src="./img/iris-dataset.png" alt="Iris on Table Lens" width="420">
-- Conjunto de dados [TItanic](https://www.kaggle.com/c/titanic)
+- Conjunto de dados <a href="https://www.kaggle.com/c/titanic"> Titanic</a>
 <img src="./img/titanic-dataset.png" alt="Titanic on Table Lens">
