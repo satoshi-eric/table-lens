@@ -14,4 +14,4 @@ A seguir, são listados os passos para rodar o aplicativo localmente:
 - Conjunto de dados [Iris](https://archive.ics.uci.edu/ml/datasets/iris)
 <img src="./img/iris-dataset.png" alt="Iris on Table Lens" width="420">
 - Conjunto de dados [TItanic](https://www.kaggle.com/c/titanic)
-![Titanic on Table Lens](./img/titanic-dataset.png)
+<img src="./img/titanic-dataset.png" alt="Titanic on Table Lens">
