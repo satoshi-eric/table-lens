@@ -1,6 +1,5 @@
 import * as d3 from 'd3'
 import Modal from 'react-modal'
-import Draggable from 'react-draggable'
 
 interface configurationsProps {
     isOpen: boolean,
