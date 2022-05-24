@@ -4,10 +4,13 @@ import * as d3 from 'd3'
 interface rowProps {
     row: object, 
     xScales: Array<d3.ScaleLinear<number, number, never> | d3.ScaleBand<string>>, 
-    isLast?: boolean
+    isLast?: boolean,
+    defaultHeight: number,
+    zoomHeight: number,
+    width: number
 }
 
-const Row = ({ row, xScales, isLast }: rowProps) => {
+const Row = ({ row, xScales, isLast, defaultHeight = 5, zoomHeight = 30, width = 150 }: rowProps) => {
 
     const rowStyle: React.CSSProperties = {
         display: "flex",
@@ -20,8 +23,9 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         borderRight: "1px solid black",
         borderBottom: isLast ? "1px solid black" : "none",
         padding: "0px 5px",
-        width: "150px",
-        position: "relative"
+        width: `${width}px`,
+        position: "relative",
+        boxSizing: "border-box"
     }
 
     const cellStyleClicked: React.CSSProperties = {
@@ -31,8 +35,9 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         borderTop: "1px solid black",
         borderBottom: "1px solid black",
         padding: "0px 5px",
-        width: "150px",
-        position: "relative"
+        width: `${width}px`,
+        position: "relative",
+        boxSizing: "border-box"
     }
 
     const barStyle = (scale: d3.ScaleLinear<number, number> | d3.ScaleBand<string>, value: any): React.CSSProperties => {
@@ -40,14 +45,14 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         if (isCategorical) {
             return {
                 width: `${100/scale.domain().length}%`,
-                height: "5px",
+                height: `${defaultHeight}px`,
                 marginLeft: `${scale(value)}%`,
                 backgroundColor: "#4284f5"
             }
         }
         return {
             width: `${scale(value)}%`,
-            height: "5px",
+            height: `${defaultHeight}px`,
             backgroundColor: "#4284f5",
             color: "black",
         }
@@ -58,14 +63,14 @@ const Row = ({ row, xScales, isLast }: rowProps) => {
         if (isCategorical) {
             return {
                 width: `${100/scale.domain().length}%`,
-                height: "30px",
+                height: `${zoomHeight}px`,
                 marginLeft: `${scale(value)}%`,
                 backgroundColor: "#4284f5"
             }
         }
         return {
             width: `${scale(value)}%`,
-            height: "30px",
+            height: `${zoomHeight}px`,
             backgroundColor: "#4284f5",
             color: "black",
         }

@@ -1,33 +1,42 @@
 import React from 'react'
 import * as d3 from 'd3'
 import TableLens from './components/TableLens'
+import Configurations from './components/Configurations'
 
 const App = () => {
   const csvUrl = 'https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/iris.csv'
-  // const csvUrl = 'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'
   const [data, setData] = React.useState<d3.DSVRowArray<string>>()
   const [state, setState] = React.useState<boolean>(false)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [defaultHeight, setDefaultHeight] = React.useState(5)
+  const [zoomHeight, setZoomHeight] = React.useState(30)
+  const [width, setWidth] = React.useState(100)
   
   React.useEffect(() => {
     d3.csv(csvUrl).then(res => { setData(res) })
   }, [])
 
-  const uploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let files = event.target.files
-    if (files && files[0]) {
-      files[0].text().then(
-        res => setData(d3.csvParse(res))
-      )
-    }
-    setState(!state)
-  }
 
   if (!data) return <div>Loading...</div>
   
   return (
-    <div>
-      <input type="file" name="file" id="file" onChange={uploadFile} />
-      <TableLens data={data}/>
+    <div style={{margin: "10px"}}>
+      <input style={{marginBottom: "10px", width: "150px"}} type="button" value="Configurações" onClick={() => {setIsOpen(true)}} />
+      <Configurations 
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        defaultHeight={defaultHeight}
+        setDefaultHeight={setDefaultHeight}
+        zoomHeight={zoomHeight}
+        setZoomHeight={setZoomHeight}
+        setState={setState}
+        state={state}
+        data={data}
+        setData={setData}
+        width={width}
+        setWidth={setWidth}
+      />
+      <TableLens data={data} defaultHeight={defaultHeight} zoomHeight={zoomHeight} width={width} />
     </div>
   );
 }

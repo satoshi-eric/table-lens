@@ -2,10 +2,17 @@ import React from "react"
 import * as d3 from 'd3'
 import Row from "./Row"
 
-const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
+interface tableLensProps {
+    data: d3.DSVRowArray<string>,
+    defaultHeight: number,
+    zoomHeight: number,
+    width: number,
+}
+
+const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tableLensProps) => {
 
     const tableLensStyle: React.CSSProperties = {
-        width: data.columns.length * 150 + "px",
+        width: data.columns.length * width + "px",
     }
 
     const headerStyle: React.CSSProperties = {
@@ -21,8 +28,10 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
     const headerCellStyle: React.CSSProperties = {
         border: "1px solid black",
         padding: "5px",
-        width: "150px",
-        cursor: "pointer"
+        width: `${width}px`,
+        cursor: "pointer",
+        boxSizing: "border-box",
+        overflow: "hidden",
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
@@ -85,9 +94,22 @@ const TableLens = ({data}: {data: d3.DSVRowArray<string>}) => {
             <div style={bodyStyle}>
                 {rows.map((row, i) => {
                     if (i === rows.length - 1) {
-                        return <Row xScales={xScales} key={i} row={row} isLast={true}/>
+                        return <Row 
+                            xScales={xScales} 
+                            key={i} row={row} 
+                            isLast={true} 
+                            defaultHeight={defaultHeight} 
+                            zoomHeight={zoomHeight} 
+                            width={width}
+                        />
                     }
-                    return <Row xScales={xScales} key={i} row={row}/>
+                    return <Row 
+                        xScales={xScales} 
+                        key={i} row={row} 
+                        defaultHeight={defaultHeight} 
+                        zoomHeight={zoomHeight} 
+                        width={width}
+                    />
                 })}
             </div>
         </div>
