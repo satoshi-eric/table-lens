@@ -17,7 +17,23 @@ const App = () => {
   }, [])
 
 
-  if (!data) return <div>Loading...</div>
+  if (!data) return <div style={{margin: "10px"}}>
+    <input style={{marginBottom: "10px", width: "150px", display: "flex"}} type="button" value="Configurações" onClick={() => {setIsOpen(true)}} />
+      <Configurations 
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        defaultHeight={defaultHeight}
+        setDefaultHeight={setDefaultHeight}
+        zoomHeight={zoomHeight}
+        setZoomHeight={setZoomHeight}
+        setState={setState}
+        state={state}
+        setData={setData}
+        width={width}
+        setWidth={setWidth}
+      />
+    Loading...
+  </div>
   
   return (
     <div style={{margin: "10px"}}>
@@ -31,7 +47,6 @@ const App = () => {
         setZoomHeight={setZoomHeight}
         setState={setState}
         state={state}
-        data={data}
         setData={setData}
         width={width}
         setWidth={setWidth}
