@@ -93,23 +93,25 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
             </div>
             <div style={bodyStyle}>
                 {rows.map((row, i) => {
-                    if (i === rows.length - 1) {
+                    if (Object.values(row).every(r => r !== null && r !== undefined && r !== "")) {
+                        if (i === rows.length - 1) {
+                            return <Row 
+                                xScales={xScales} 
+                                key={i} row={row} 
+                                isLast={true} 
+                                defaultHeight={defaultHeight} 
+                                zoomHeight={zoomHeight} 
+                                width={width}
+                            />
+                        }
                         return <Row 
                             xScales={xScales} 
                             key={i} row={row} 
-                            isLast={true} 
                             defaultHeight={defaultHeight} 
                             zoomHeight={zoomHeight} 
                             width={width}
                         />
                     }
-                    return <Row 
-                        xScales={xScales} 
-                        key={i} row={row} 
-                        defaultHeight={defaultHeight} 
-                        zoomHeight={zoomHeight} 
-                        width={width}
-                    />
                 })}
             </div>
         </div>
