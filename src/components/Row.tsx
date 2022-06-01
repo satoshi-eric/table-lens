@@ -82,7 +82,7 @@ const Row = ({ row, xScales, isLast, defaultHeight = 5, zoomHeight = 30, width =
     
     const bars = Object.values(row).map((value, i) => {
         return <div style={mouseEnter ? cellStyleClicked : cellStyle} key={i}>
-            <div style={{position: "absolute", userSelect: "none", overflow: "hidden"}}>
+            <div style={{position: "absolute", userSelect: "none", overflow: "hidden"}} title={value}>
                 {mouseEnter ? value : ""}
             </div>
             <div 
