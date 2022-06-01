@@ -42,7 +42,7 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         cursor: "pointer",
         boxSizing: "border-box",
         overflow: "hidden",
-        backgroundColor: "yellow"
+        backgroundColor: "white"
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
@@ -94,7 +94,7 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
 
     const headerCells = columns.map((column, i) => {
         return (
-            <div style={i === selected ? selectedHeaderCellStyle : headerCellStyle} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
+            <div title={column} style={i === selected ? selectedHeaderCellStyle : headerCellStyle} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
                 {column}
             </div>
         )
