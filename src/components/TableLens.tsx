@@ -32,11 +32,23 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         cursor: "pointer",
         boxSizing: "border-box",
         overflow: "hidden",
+        backgroundColor: "white"
+    }
+
+    const selectedHeaderCellStyle: React.CSSProperties = {
+        border: "1px solid black",
+        padding: "5px",
+        width: `${width}px`,
+        cursor: "pointer",
+        boxSizing: "border-box",
+        overflow: "hidden",
+        backgroundColor: "yellow"
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
     const [rows, setRows] = React.useState<Array<any>>([])
     const [state, setState] = React.useState<boolean>(false)
+    const [selected, setSelected] = React.useState<number>(-1)
 
     React.useEffect(() => {
         setColumns(data.columns)
@@ -80,16 +92,22 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         setRows(sortedRows)
     }
 
+    const headerCells = columns.map((column, i) => {
+        return (
+            <div style={i === selected ? selectedHeaderCellStyle : headerCellStyle} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
+                {column}
+            </div>
+        )
+    })
+
+    const setColor = (event: React.SyntheticEvent, i: number) => {
+        setSelected(i)
+    }
+
     return (
         <div style={tableLensStyle}>
             <div style={headerStyle}>
-                {columns.map((column, i) => {
-                    return (
-                        <div style={headerCellStyle} key={i} onClick={sortRows}>
-                            {column}
-                        </div>
-                    )
-                })}
+                {headerCells}
             </div>
             <div style={bodyStyle}>
                 {rows.map((row, i) => {
