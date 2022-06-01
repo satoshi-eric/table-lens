@@ -42,7 +42,7 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         cursor: "pointer",
         boxSizing: "border-box",
         overflow: "hidden",
-        backgroundColor: "white"
+        backgroundColor: "white",
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
@@ -80,7 +80,7 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
 
     const sortRows = (event: React.SyntheticEvent) => {
         const target = event.target as HTMLInputElement
-        const column = target.innerText
+        const column = target.id
         const isCategorical = isNaN(+rows[0][column])
         const sortedRows = rows.sort((a, b) => {
             if (isCategorical) {
@@ -92,9 +92,13 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         setRows(sortedRows)
     }
 
+    const sortColumns = (event: React.SyntheticEvent, i: number) => {
+
+    }
+
     const headerCells = columns.map((column, i) => {
         return (
-            <div title={column} style={i === selected ? selectedHeaderCellStyle : headerCellStyle} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
+            <div title={column} style={i === selected ? selectedHeaderCellStyle : headerCellStyle} id={column} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
                 {column}
             </div>
         )

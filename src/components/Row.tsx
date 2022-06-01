@@ -25,7 +25,8 @@ const Row = ({ row, xScales, isLast, defaultHeight = 5, zoomHeight = 30, width =
         padding: "0px 5px",
         width: `${width}px`,
         position: "relative",
-        boxSizing: "border-box"
+        boxSizing: "border-box",
+        overflow: "hidden"
     }
 
     const cellStyleClicked: React.CSSProperties = {
@@ -37,7 +38,8 @@ const Row = ({ row, xScales, isLast, defaultHeight = 5, zoomHeight = 30, width =
         padding: "0px 5px",
         width: `${width}px`,
         position: "relative",
-        boxSizing: "border-box"
+        boxSizing: "border-box",
+        overflow: "hidden"
     }
 
     const barStyle = (scale: d3.ScaleLinear<number, number> | d3.ScaleBand<string>, value: any): React.CSSProperties => {
@@ -65,7 +67,7 @@ const Row = ({ row, xScales, isLast, defaultHeight = 5, zoomHeight = 30, width =
                 width: `${100/scale.domain().length}%`,
                 height: `${zoomHeight}px`,
                 marginLeft: `${scale(value)}%`,
-                backgroundColor: "#4284f5"
+                backgroundColor: "#4284f5",
             }
         }
         return {
@@ -80,7 +82,7 @@ const Row = ({ row, xScales, isLast, defaultHeight = 5, zoomHeight = 30, width =
     
     const bars = Object.values(row).map((value, i) => {
         return <div style={mouseEnter ? cellStyleClicked : cellStyle} key={i}>
-            <div style={{position: "absolute", userSelect: "none"}}>
+            <div style={{position: "absolute", userSelect: "none", overflow: "hidden"}}>
                 {mouseEnter ? value : ""}
             </div>
             <div 
