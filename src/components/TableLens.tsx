@@ -4,16 +4,17 @@ import Row from "./Row"
 import calcPearsonCorrelation from "../utils/statistics"
 
 interface tableLensProps {
-    data: d3.DSVRowArray<string>,
+    columnNames: Array<string>,
+    data: Array<any>,
     defaultHeight: number,
     zoomHeight: number,
     width: number,
 }
 
-const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tableLensProps) => {
+const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width = 150}: tableLensProps) => {
 
     const tableLensStyle: React.CSSProperties = {
-        width: data.columns.length * width + "px",
+        width: columnNames.length * width + "px",
     }
 
     const headerStyle: React.CSSProperties = {
@@ -43,18 +44,18 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         cursor: "pointer",
         boxSizing: "border-box",
         overflow: "hidden",
-        backgroundColor: "white",
+        backgroundColor: "yellow",
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
     const [rows, setRows] = React.useState<Array<any>>([])
     const [state, setState] = React.useState<boolean>(false)
-    const [selectedColumn, setSelectedColumn] = React.useState<number>(-1)
+    const [selectedColumn, setSelectedColumn] = React.useState<string>("")
 
     React.useEffect(() => {
-        setColumns(data.columns)
-        setRows(data)
-    }, [data, state])
+        setColumns(columnNames)
+        setRows(data.map(d => d))
+    }, [data])
 
     const xScales: Array<d3.ScaleLinear<number, number, never> | d3.ScaleBand<string>>  = columns.map((column, i) => {
         const domain: Array<number> = rows.map(row => +row[column])
@@ -107,6 +108,9 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         })
         const sortedCorrelations = columnsCorrelation
             .sort((a, b) => {
+                if (isNaN(a.correlation) || isNaN(b.correlation)) {
+                    return a.column > b.column ? 1 : -1
+                }
                 return b.correlation - a.correlation
             })
             .map(column => column.column)
@@ -125,10 +129,10 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         return (
             <div 
                 title={column} 
-                style={i === selectedColumn ? selectedHeaderCellStyle : headerCellStyle} 
+                style={column === selectedColumn ? selectedHeaderCellStyle : headerCellStyle} 
                 id={column} 
                 key={i} 
-                onClick={(event) => {sortRows(event); setColor(event, i)}}
+                onClick={(event) => {sortRows(event); setColor(event, column)}}
             >
                 {column}
                 <button id={column} onClick={sortColumns}>Correlação</button>
@@ -136,8 +140,8 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         )
     })
 
-    const setColor = (event: React.SyntheticEvent, i: number) => {
-        setSelectedColumn(i)
+    const setColor = (event: React.SyntheticEvent, column: string) => {
+        setSelectedColumn(column)
     }
 
     return (

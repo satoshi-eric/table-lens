@@ -51,7 +51,7 @@ const App = () => {
         width={width}
         setWidth={setWidth}
       />
-      <TableLens data={data} defaultHeight={defaultHeight} zoomHeight={zoomHeight} width={width} />
+      <TableLens columnNames={data.columns} data={data.map(d => d)} defaultHeight={defaultHeight} zoomHeight={zoomHeight} width={width} />
     </div>
   );
 }
