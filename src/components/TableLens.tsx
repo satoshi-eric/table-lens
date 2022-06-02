@@ -1,6 +1,7 @@
 import React from "react"
 import * as d3 from 'd3'
 import Row from "./Row"
+import calcPearsonCorrelation from "../utils/statistics"
 
 interface tableLensProps {
     data: d3.DSVRowArray<string>,
@@ -42,7 +43,7 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         cursor: "pointer",
         boxSizing: "border-box",
         overflow: "hidden",
-        backgroundColor: "yellow",
+        backgroundColor: "white",
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
@@ -92,14 +93,45 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         setRows(sortedRows)
     }
 
-    const sortColumns = (event: React.SyntheticEvent, i: number) => {
-
+    const sortColumns = (event: React.SyntheticEvent) => {
+        event.stopPropagation()
+        const target = event.target as HTMLInputElement
+        const currentColumnId = target.id
+        const columnsCorrelation = columns.map((column, i) => {
+            const otherColumn = rows.map(row => +row[column])
+            const currentColumn = rows.map(row => +row[currentColumnId])
+            return {
+                column,
+                correlation: calcPearsonCorrelation(currentColumn, otherColumn)
+            }
+        })
+        const sortedCorrelations = columnsCorrelation
+            .sort((a, b) => {
+                return b.correlation - a.correlation
+            })
+            .map(column => column.column)
+        setColumns(sortedCorrelations)
+        const sortedRows = rows.map(row => {
+            const newRow = Object()
+            sortedCorrelations.forEach(column => {
+                newRow[column] = row[column]
+            })
+            return newRow
+        })
+        setRows(sortedRows)
     }
 
     const headerCells = columns.map((column, i) => {
         return (
-            <div title={column} style={i === selectedColumn ? selectedHeaderCellStyle : headerCellStyle} id={column} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
+            <div 
+                title={column} 
+                style={i === selectedColumn ? selectedHeaderCellStyle : headerCellStyle} 
+                id={column} 
+                key={i} 
+                onClick={(event) => {sortRows(event); setColor(event, i)}}
+            >
                 {column}
+                <button id={column} onClick={sortColumns}>Correlação</button>
             </div>
         )
     })
