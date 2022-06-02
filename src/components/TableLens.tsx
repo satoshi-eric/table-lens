@@ -42,13 +42,13 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
         cursor: "pointer",
         boxSizing: "border-box",
         overflow: "hidden",
-        backgroundColor: "white",
+        backgroundColor: "yellow",
     }
 
     const [columns, setColumns] = React.useState<Array<any>>([])
     const [rows, setRows] = React.useState<Array<any>>([])
     const [state, setState] = React.useState<boolean>(false)
-    const [selected, setSelected] = React.useState<number>(-1)
+    const [selectedColumn, setSelectedColumn] = React.useState<number>(-1)
 
     React.useEffect(() => {
         setColumns(data.columns)
@@ -98,14 +98,14 @@ const TableLens = ({data, defaultHeight = 5, zoomHeight = 30, width = 150}: tabl
 
     const headerCells = columns.map((column, i) => {
         return (
-            <div title={column} style={i === selected ? selectedHeaderCellStyle : headerCellStyle} id={column} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
+            <div title={column} style={i === selectedColumn ? selectedHeaderCellStyle : headerCellStyle} id={column} key={i} onClick={(event) => {sortRows(event); setColor(event, i)}}>
                 {column}
             </div>
         )
     })
 
     const setColor = (event: React.SyntheticEvent, i: number) => {
-        setSelected(i)
+        setSelectedColumn(i)
     }
 
     return (
