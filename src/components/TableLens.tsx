@@ -108,8 +108,11 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
         })
         const sortedCorrelations = columnsCorrelation
             .sort((a, b) => {
-                if (isNaN(a.correlation) || isNaN(b.correlation)) {
-                    return a.column > b.column ? 1 : -1
+                if (isNaN(a.correlation)) {
+                    return 1
+                }
+                if (isNaN(b.correlation)) {
+                    return -1
                 }
                 return b.correlation - a.correlation
             })
@@ -123,6 +126,7 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
             return newRow
         })
         setRows(sortedRows)
+        setSelectedColumn(target.id)
     }
 
     const headerCells = columns.map((column, i) => {
