@@ -22,9 +22,12 @@ const calcVar = (arr: Array<number>) => {
     return variance
 }
 
-const calcPearsonCorrelation = (xArr: Array<number>, yArr: Array<number>) => {
+const calcPearsonCorrelation = (xArr: Array<any>, yArr: Array<any>) => {
     if (xArr.length !== yArr.length) {
         return 0
+    }
+    if (isNaN(yArr[0]) || isNaN(xArr[0])) {
+        return Number.NEGATIVE_INFINITY
     }
     return calcCov(xArr, yArr) / Math.sqrt(calcVar(xArr) * calcVar(yArr))
 }

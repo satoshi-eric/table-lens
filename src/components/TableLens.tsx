@@ -47,10 +47,19 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
         backgroundColor: "yellow",
     }
 
+    const correlationButton: React.CSSProperties = {
+        border: "1px solid black",
+        margin: "5px",
+        overflow: "hidden",
+        backgroundColor: "lightblue",
+        cursor: "pointer",
+    }
+
     const [columns, setColumns] = React.useState<Array<any>>([])
     const [rows, setRows] = React.useState<Array<any>>([])
     const [state, setState] = React.useState<boolean>(false)
     const [selectedColumn, setSelectedColumn] = React.useState<string>("")
+    const [correlations, setCorrelations] = React.useState<Array<any>>([])
 
     React.useEffect(() => {
         setColumns(columnNames)
@@ -108,12 +117,6 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
         })
         const sortedCorrelations = columnsCorrelation
             .sort((a, b) => {
-                if (isNaN(a.correlation)) {
-                    return 1
-                }
-                if (isNaN(b.correlation)) {
-                    return -1
-                }
                 return b.correlation - a.correlation
             })
             .map(column => column.column)
@@ -125,8 +128,13 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
             })
             return newRow
         })
+        setCorrelations(columnsCorrelation)
         setRows(sortedRows)
         setSelectedColumn(target.id)
+    }
+
+    const setColor = (event: React.SyntheticEvent, column: string) => {
+        setSelectedColumn(column)
     }
 
     const headerCells = columns.map((column, i) => {
@@ -139,14 +147,17 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
                 onClick={(event) => {sortRows(event); setColor(event, column)}}
             >
                 {column}
-                <button id={column} onClick={sortColumns}>Correlação</button>
+                <button 
+                    style={correlationButton}
+                    id={column} 
+                    onClick={sortColumns}
+                >
+                    Correlação: {correlations[i] ? correlations[i].correlation : "N/A"}
+                </button>
             </div>
         )
     })
 
-    const setColor = (event: React.SyntheticEvent, column: string) => {
-        setSelectedColumn(column)
-    }
 
     return (
         <div style={tableLensStyle}>
