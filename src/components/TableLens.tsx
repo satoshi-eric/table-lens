@@ -152,7 +152,7 @@ const TableLens = ({columnNames, data, defaultHeight = 5, zoomHeight = 30, width
                     id={column} 
                     onClick={sortColumns}
                 >
-                    Correlação: {correlations[i] ? correlations[i].correlation : "N/A"}
+                    Correlação: {correlations[i] ? (isNaN(correlations[i].correlation) ? "N/A" : correlations[i].correlation.toFixed(2)) : "N/A"}
                 </button>
             </div>
         )
