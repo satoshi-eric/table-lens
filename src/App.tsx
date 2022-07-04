@@ -37,6 +37,7 @@ const App = () => {
   
   return (
     <div style={{margin: "10px"}}>
+      <h1>Table Lens</h1>
       <input style={{marginBottom: "10px", width: "150px"}} type="button" value="Configurações" onClick={() => {setIsOpen(true)}} />
       <Configurations 
         isOpen={isOpen}
